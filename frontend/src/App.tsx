@@ -1,16 +1,24 @@
+import React from 'react';
+import { 
+  LeftBar,
+  Map,
+  RightBar
+} from "@components"
+import { project } from "@constants"
+
 function App() {
 
   return (
-  // <div className="bg-gradient-to-tr from-[#6D26FF] via-[#0047BA] to-[#002470] min-h-screen text-gray-50">
-  <div className="bg-gradient-to-r from-red-500 to-orange-500 min-h-screen text-gray-50 flex">
-    <div className="flex flex-col items-center grow bg-black/20">
+  <div className="min-h-screen text-gray-50 flex flex-col bg-black/95">
+      <header className="h-[80px] flex items-center text-2xl font-semibold p-4 text-yellow-400">{project.title.toUpperCase()}</header>
 
-      <div className="bg-white/5 max-w-7xl w-full flex-col grow">
-        <h1 className="text-3xl font-semibold">Hello World</h1>
-
+      <div className="grid grid-cols-[320px_1fr_320px] grow">
+        <LeftBar />
+        <Map />
+        <RightBar />
       </div>
-
-    </div>
+      
+      <footer className="h-[80px] flex items-center p-4 justify-center font-thin text-gray-200">All rights reserved - 2024</footer> 
   </div>
   )
 }
