@@ -1,18 +1,18 @@
-import React, { useRef, useEffect, useState } from 'react';
-import 'ol/ol.css';
+import React, { useRef, useEffect } from 'react';
 import { Map as OpenLayerMap, View } from 'ol';
-import TileLayer from 'ol/layer/Tile';
-import OSM from 'ol/source/OSM';
 import { fromLonLat } from 'ol/proj';
 import ScaleLine from 'ol/control/ScaleLine.js';
 import layers from './Layers';
 import { useMap } from './MapProvider';
+import { createVectorLayer } from './LayersDrawing';
+
+import 'ol/ol.css';
 
 const MapRender = () => {
   const mapRef = useRef<HTMLDivElement | null>(null);
   const scaleLineControl = new ScaleLine();
 
-  const {setMap, setCurrentLayer} = useMap();
+  const {setMap, setCurrentLayer, source} = useMap();
 
   useEffect(() => {
     if (!mapRef.current) return;
@@ -22,7 +22,7 @@ const MapRender = () => {
         center: fromLonLat([171.03033091083554, -42.71478588312042]),
         zoom: 17,
       }),
-      layers: [layers.satelliteView],
+      layers: [layers.satelliteView, createVectorLayer(source)],
       controls: [scaleLineControl], 
     });
 
