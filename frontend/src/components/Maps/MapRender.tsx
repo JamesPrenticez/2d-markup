@@ -22,7 +22,7 @@ const MapRender = () => {
         center: fromLonLat([171.03033091083554, -42.71478588312042]),
         zoom: 17,
       }),
-      layers: [layers.streetView],
+      layers: [layers.satelliteView],
       controls: [scaleLineControl], 
     });
 

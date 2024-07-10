@@ -2,12 +2,16 @@ import React, { type ReactElement, type ReactNode } from 'react'
 import { MapProvider } from './MapProvider'
 import LayerSwitcher from './LayerSwitcher'
 import MapRender from './MapRender'
+import Scale from './Scale'
+import ScaleControl from './ScaleControl'
 
 const Map = () => {
   return (
     <MapProvider>
       <MapWrapper>
         <LayerSwitcher />
+        <Scale />
+        <ScaleControl />
         <MapRender />
       </MapWrapper>
     </MapProvider>
