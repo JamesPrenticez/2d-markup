@@ -8,15 +8,13 @@ import DrawPolygon from './DrawPolygon'
 
 const Map = () => {
   return (
-    <MapProvider>
-      <MapWrapper>
-        <LayerSwitcher />
-        <Scale />
-        <ScaleControl />
-        <DrawPolygon />
-        <MapRender />
-      </MapWrapper>
-    </MapProvider>
+    <MapWrapper>
+      <LayerSwitcher />
+      <Scale />
+      <ScaleControl />
+      <DrawPolygon />
+      <MapRender />
+    </MapWrapper>
   )
 }
 

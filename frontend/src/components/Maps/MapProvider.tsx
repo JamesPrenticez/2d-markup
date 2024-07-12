@@ -8,34 +8,28 @@ import VectorSource from 'ol/source/Vector';
 import type Draw from 'ol/interaction/Draw';
 
 interface Context {
+  map: OpenLayerMap | null;
+  setMap: (map: OpenLayerMap) => void;
   currentLayer: TileLayer<OSM> | null;
   setCurrentLayer: (layer: TileLayer<OSM>) => void;
+
 };
 
-const MapLayerContext = createContext<MapLayerContextType | undefined>(undefined);
+const MapLayerContext = createContext<Context | undefined>(undefined);
 
 interface ProviderProps {
   children: ReactNode;
 }
 
 export const MapProvider = ({ children }: ProviderProps) => {
-  // Map Types
   const [map, setMap] = useState<OpenLayerMap | null>(null);
   const [currentLayer, setCurrentLayer] = useState<TileLayer<OSM> | null>(layers.satelliteView);
-
-  // Drawing
-  const [source] = useState(new VectorSource());
-  const [draw, setDraw] = useState<Draw | null>(null);
-
 
   const value = {
     map,
     setMap,
     currentLayer,
     setCurrentLayer,
-    source,
-    draw,
-    setDraw
   }
 
   return <MapLayerContext.Provider value={value}>{children}</MapLayerContext.Provider>;

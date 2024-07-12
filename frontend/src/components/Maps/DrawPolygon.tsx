@@ -10,27 +10,31 @@ import { Style, Fill, Stroke } from 'ol/style';
 import { getArea, getLength } from 'ol/sphere';
 import Overlay from 'ol/Overlay';
 import Polygon from 'ol/geom/Polygon';
+import { useDrawingTools } from './DrawingToolsProvider';
+import { startDrawing, finishDrawing } from './draw/handleDrawing';
+
 
 const DrawPolygon = () => {
-  const {map, source, draw, setDraw} = useMap(); 
+  const {map} = useMap(); 
+  const {source, draw, setDraw} = useDrawingTools();
 
-  const addInteraction = () => {
-    if (!map) return;
-    const drawInteraction = new Draw({
-      source: source,
-      type: 'Polygon',
-    });
-    map.addInteraction(drawInteraction);
-    setDraw(drawInteraction);
-  };
+  // const addInteraction = () => {
+  //   if (!map) return;
+  //   const drawInteraction = new Draw({
+  //     source: source,
+  //     type: 'Polygon',
+  //   });
+  //   map.addInteraction(drawInteraction);
+  //   setDraw(drawInteraction);
+  // };
 
-  const finishDrawing = () => {
-    if (draw) {
-      draw.finishDrawing();
-      map.removeInteraction(draw);
-      setDraw(null);
-    }
-  };
+  // const finishDrawing = () => {
+  //   if (draw) {
+  //     draw.finishDrawing();
+  //     map.removeInteraction(draw);
+  //     setDraw(null);
+  //   }
+  // };
 
   const measurePolygon = (polygon) => {
     const area = getArea(polygon);
@@ -49,14 +53,21 @@ const DrawPolygon = () => {
     source.on('addfeature', (event) => {
       const polygon = event.feature.getGeometry();
       const { area, length } = measurePolygon(polygon);
-      alert(`Area: ${area.toFixed(2)} m², Length: ${length.toFixed(2)} m`);
+      // alert(`Area: ${area.toFixed(2)} m², Length: ${length.toFixed(2)} m`);
     });
   }, [map]);
 
   return (
     <div className="buttons">
-      <button onClick={addInteraction}>Start Drawing</button>
-      <button onClick={finishDrawing}>Finish Drawing</button>
+
+      {/* <button onClick={() => startDrawing({type: DrawingToolType.POLYGON, map, source, setDraw})}>
+        Start Drawing
+      </button>
+
+      <button onClick={() => finishDrawing({map, draw, setDraw})}>
+        Finish Drawing
+      </button> */}
+      
     </div>
   );
 };

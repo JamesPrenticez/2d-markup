@@ -7,12 +7,15 @@ import { useMap } from './MapProvider';
 import { createVectorLayer } from './LayersDrawing';
 
 import 'ol/ol.css';
+import { useDrawingTools } from './DrawingToolsProvider';
 
 const MapRender = () => {
+
   const mapRef = useRef<HTMLDivElement | null>(null);
   const scaleLineControl = new ScaleLine();
 
-  const {setMap, setCurrentLayer, source} = useMap();
+  const {setMap, setCurrentLayer} = useMap();
+  const {source} = useDrawingTools();
 
   useEffect(() => {
     if (!mapRef.current) return;
