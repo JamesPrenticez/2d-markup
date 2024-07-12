@@ -5,8 +5,9 @@ import {
   RightBar
 } from "@components"
 import { project } from "@constants"
-import { MapProvider } from '@components/Maps/MapProvider';
-import { DrawingToolsProvider } from '@components/Maps/DrawingToolsProvider';
+import { MapProvider } from '@components/Maps/providers/MapProvider';
+import { DrawingToolsProvider } from '@components/Maps/providers/DrawingToolsProvider';
+import { DimGroupProvider } from '@components/Maps/providers/DimGroupProvider';
 
 function App() {
   return (
@@ -16,9 +17,11 @@ function App() {
       <div className="grid grid-cols-[320px_1fr_320px] grow">
         <MapProvider>
           <DrawingToolsProvider>
-            <LeftBar />
-            <Map />
-            <RightBar /> 
+            <DimGroupProvider>
+              <LeftBar />
+              <Map />
+              <RightBar /> 
+            </DimGroupProvider>
           </DrawingToolsProvider>
         </MapProvider> 
       </div>

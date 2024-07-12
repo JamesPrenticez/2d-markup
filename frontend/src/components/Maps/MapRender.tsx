@@ -3,11 +3,11 @@ import { Map as OpenLayerMap, View } from 'ol';
 import { fromLonLat } from 'ol/proj';
 import ScaleLine from 'ol/control/ScaleLine.js';
 import layers from './Layers';
-import { useMap } from './MapProvider';
+import { useMap } from './providers/MapProvider';
 import { createVectorLayer } from './LayersDrawing';
 
 import 'ol/ol.css';
-import { useDrawingTools } from './DrawingToolsProvider';
+import { useDrawingTools } from './providers/DrawingToolsProvider';
 
 const MapRender = () => {
 

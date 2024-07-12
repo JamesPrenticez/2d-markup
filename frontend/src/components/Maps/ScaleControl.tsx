@@ -2,7 +2,7 @@
 import React from 'react';
 import { Map as OpenLayerMap } from 'ol';
 import { METERS_PER_UNIT } from 'ol/proj/Units';
-import { useMap } from './MapProvider';
+import { useMap } from './providers/MapProvider';
 
 const scales = [50, 100, 200, 500, 1000];
 

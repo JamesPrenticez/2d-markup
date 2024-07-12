@@ -1,7 +1,7 @@
 // @ts-nocheck
 
 import React, { useRef, useEffect, useState } from 'react';
-import { useMap } from './MapProvider';
+import { useMap } from '../providers/MapProvider';
 import 'ol/ol.css';
 import Draw from 'ol/interaction/Draw';
 import { Vector as VectorLayer } from 'ol/layer';
@@ -10,13 +10,15 @@ import { Style, Fill, Stroke } from 'ol/style';
 import { getArea, getLength } from 'ol/sphere';
 import Overlay from 'ol/Overlay';
 import Polygon from 'ol/geom/Polygon';
-import { useDrawingTools } from './DrawingToolsProvider';
-import { startDrawing, finishDrawing } from './draw/handleDrawing';
+import { useDrawingTools } from '../providers/DrawingToolsProvider';
+import { startDrawing, finishDrawing } from './handleDrawing';
+import { useDimGroups } from '../providers/DimGroupProvider';
 
 
 const DrawPolygon = () => {
   const {map} = useMap(); 
   const {source, draw, setDraw} = useDrawingTools();
+  const { setDimGroups } = useDimGroups();
 
   // const addInteraction = () => {
   //   if (!map) return;
@@ -50,11 +52,22 @@ const DrawPolygon = () => {
   useEffect(() => {
     if (!map) return;
 
-    source.on('addfeature', (event) => {
-      const polygon = event.feature.getGeometry();
-      const { area, length } = measurePolygon(polygon);
-      // alert(`Area: ${area.toFixed(2)} m², Length: ${length.toFixed(2)} m`);
+
+    finishDrawing({
+      map,
+      draw,
+      setDraw,
+      setDimGroups
     });
+
+    // source.on('addfeature', (event) => {
+    //   console.log("here")
+    //   const polygon = event.feature.getGeometry();
+    //   const { area, length } = measurePolygon(polygon);
+    //   // alert(`Area: ${area.toFixed(2)} m², Length: ${length.toFixed(2)} m`);
+    // });
+
+    
   }, [map]);
 
   return (

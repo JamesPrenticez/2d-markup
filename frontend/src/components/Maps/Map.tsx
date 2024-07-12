@@ -1,10 +1,10 @@
 import React, { type ReactElement, type ReactNode } from 'react'
-import { MapProvider } from './MapProvider'
+import { MapProvider } from './providers/MapProvider'
 import LayerSwitcher from './LayerSwitcher'
 import MapRender from './MapRender'
 import Scale from './Scale'
 import ScaleControl from './ScaleControl'
-import DrawPolygon from './DrawPolygon'
+import DrawPolygon from './draw/DrawPolygon'
 
 const Map = () => {
   return (
@@ -12,7 +12,7 @@ const Map = () => {
       <LayerSwitcher />
       <Scale />
       <ScaleControl />
-      <DrawPolygon />
+      {/* <DrawPolygon /> */}
       <MapRender />
     </MapWrapper>
   )

@@ -1,5 +1,5 @@
 import React, { type ChangeEvent} from 'react'
-import { useMap } from './MapProvider';
+import { useMap } from './providers/MapProvider';
 import layers from './Layers';
 
 const LayerSwitcher = () => {

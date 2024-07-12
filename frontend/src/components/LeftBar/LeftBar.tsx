@@ -1,24 +1,27 @@
 import React, { useState } from 'react'
 import { capitalizeFirstLetter } from '@utils';
 import Icon from '@icons';
-import { useMap } from '@components/Maps/MapProvider';
+import { useMap } from '@components/Maps/providers/MapProvider';
 
-import { useDrawingTools } from '@components/Maps/DrawingToolsProvider';
-import { startDrawing } from '@components/Maps/draw';
+import { useDrawingTools } from '@components/Maps/providers/DrawingToolsProvider';
+import { handleDrawing, finishDrawing } from '@components/Maps/draw';
 import { DrawingToolType, ToolName } from '@models';
 import { drawingTools } from '@components/Maps/draw/drawingTools';
+import { useDimGroups } from '@components/Maps/providers/DimGroupProvider';
 
 const LeftBar = () => {
   const { map } = useMap();
   const { source, draw, setDraw } = useDrawingTools();
+  const { setDimGroups } = useDimGroups();
 
   const [activeTool, setActiveTool] = useState<ToolName | null>(null);
 
   const handleClick = (toolName: ToolName) => {
     setActiveTool(toolName)
-
-    startDrawing({type: DrawingToolType.POLYGON, map, source, setDraw})
+    handleDrawing({type: DrawingToolType.POLYGON, map, source, setDraw, setDimGroups})
   }
+
+  // On Key Down - Finish Drawing early
 
   console.log(activeTool)
 

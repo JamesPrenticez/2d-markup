@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { Map as OpenLayerMap } from 'ol';
 import { getCenter, getWidth } from 'ol/extent';
 import { METERS_PER_UNIT } from 'ol/proj/Units';
-import { useMap } from './MapProvider';
+import { useMap } from './providers/MapProvider';
 
 const Scale = () => {
   const { map } = useMap();

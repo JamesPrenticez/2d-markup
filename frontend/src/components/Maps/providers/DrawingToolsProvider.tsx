@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, type ReactNode } from 'reac
 import TileLayer from 'ol/layer/Tile';
 import OSM from 'ol/source/OSM';
 import { Options } from 'ol/Collection';
-import layers from "./Layers"
+import layers from "../Layers"
 import VectorSource from 'ol/source/Vector';
 import type Draw from 'ol/interaction/Draw';
 
