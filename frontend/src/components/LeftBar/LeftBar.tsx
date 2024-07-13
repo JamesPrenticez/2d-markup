@@ -13,17 +13,15 @@ import { twMerge } from 'tailwind-merge';
 const LeftBar = () => {
   const { map } = useMap();
   const { getSourceByDimGroupUuid, draw, setDraw } = useDrawingTools();
-  const { setDimGroups, activeDimGroupUuid } = useDimGroups();
+  const { addDimToDimGroup, activeDimGroupUuid } = useDimGroups();
 
   const [activeTool, setActiveTool] = useState<ToolName | null>(null); // move to provider?
 
   const handleClick = (toolName: ToolName) => {
-    console.log(activeDimGroupUuid)
     if(!activeDimGroupUuid) return;
     const source = getSourceByDimGroupUuid(activeDimGroupUuid)
-    console.log(source)
     setActiveTool(toolName)
-    handleDrawing({type: DrawingToolType.POLYGON, map, source, setDraw, setDimGroups})
+    handleDrawing({type: DrawingToolType.POLYGON, map, source, setDraw, addDimToDimGroup})
   }
 
   // On Key Down - Finish Drawing early

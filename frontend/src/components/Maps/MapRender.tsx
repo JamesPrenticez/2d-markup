@@ -29,6 +29,7 @@ const MapRender = () => {
       view: new View({
         center: fromLonLat([171.03033091083554, -42.71478588312042]),
         zoom: 17,
+        projection: 'EPSG:3857',
       }),
       layers: [layers.satelliteView, ...drawingLayers],
       controls: [scaleLineControl], 
@@ -37,6 +38,8 @@ const MapRender = () => {
     mapObj.setTarget(mapRef.current);
     setMap(mapObj);
     setCurrentLayer(layers.streetView);
+
+    console.log("map render")
 
     return () => mapObj.setTarget('');
   }, [sources]);

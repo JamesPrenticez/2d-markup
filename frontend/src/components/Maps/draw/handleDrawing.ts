@@ -1,17 +1,19 @@
 import Draw from "ol/interaction/Draw";
 import { Map } from "ol";
 import VectorSource from "ol/source/Vector";
-import { DrawingToolType, IDimGroup } from "@models";
+import { DrawingToolType, IDim, IDimGroup } from "@models";
+import GeoJSON from 'ol/format/GeoJSON';
+import { generateUuid } from "@utils";
 
 interface IHandleDrawing {
   type: DrawingToolType;
   map: Map;
   source: VectorSource;
   setDraw: (draw: Draw | null) => void;
-  setDimGroups: ((dimGroups: any) => void)
+  addDimToDimGroup: any; // TODO
 }
 
-export const handleDrawing = ({type, map, source, setDraw, setDimGroups }: IHandleDrawing) => {
+export const handleDrawing = ({type, map, source, setDraw, addDimToDimGroup }: IHandleDrawing) => {
   if (!map) return;
   const draw = new Draw({
     source,
@@ -22,12 +24,12 @@ export const handleDrawing = ({type, map, source, setDraw, setDimGroups }: IHand
   setDraw(draw);
 
   // Handle draw end
-  draw.on('drawend', () => {
+  draw.on('drawend', (e) => {
     finishDrawing({
       draw,
       map,
       setDraw,
-      setDimGroups
+      addDimToDimGroup
     })
   });
 };
@@ -36,26 +38,30 @@ interface IFinishDrawing {
   map: Map;
   draw: Draw;
   setDraw: (draw: Draw | null) => void;
-  setDimGroups: any; // TODO ((dimGroups: IDimGroup) => void)
+  addDimToDimGroup: any; // TODO ((dimGroups: IDimGroup) => void)
 }
 
 // Used to force draw end e.g. onkeydown "ESC | Enter"
-export const finishDrawing = ({map, draw, setDraw, setDimGroups}: IFinishDrawing) => {
+export const finishDrawing = ({map, draw, setDraw, addDimToDimGroup}: IFinishDrawing) => {
   if (draw) {
 
     draw.finishDrawing();
     map.removeInteraction(draw);
 
     // Add to dim group
-    const newDimGroup: IDimGroup = {
-      uuid: "",
+    const newDim: IDim = {
+      uuid: `temp-${generateUuid()}`,
       name: "test",
+      quantity: 30,
+      unit: "m"
     }
 
-    setDimGroups((prev: IDimGroup[]) => [...prev, newDimGroup])
+    addDimToDimGroup(newDim)
 
     // End
     setDraw(null);
   }
 };
+
+
 
