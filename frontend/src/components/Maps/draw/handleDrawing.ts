@@ -36,7 +36,7 @@ interface IFinishDrawing {
   map: Map;
   draw: Draw;
   setDraw: (draw: Draw | null) => void;
-  setDimGroups: ((dimGroups: any) => void)
+  setDimGroups: any; // TODO ((dimGroups: IDimGroup) => void)
 }
 
 // Used to force draw end e.g. onkeydown "ESC | Enter"
@@ -48,10 +48,10 @@ export const finishDrawing = ({map, draw, setDraw, setDimGroups}: IFinishDrawing
 
     // Add to dim group
     const newDimGroup: IDimGroup = {
+      uuid: "",
       name: "test",
-      quantity: 20,
-      unit: "m2"
     }
+
     setDimGroups((prev: IDimGroup[]) => [...prev, newDimGroup])
 
     // End

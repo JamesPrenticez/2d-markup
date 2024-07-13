@@ -1,2 +1,2 @@
 export * from "./drawingTools"
-export * from "./dimGroups"
+export * from "./dimensions"

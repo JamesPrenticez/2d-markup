@@ -4,19 +4,27 @@ import { createValidationSchema, v, resolver } from '@lib/FormValidation/validat
 import { Button, ErrorMessage, InputText } from '@ui';
 import useForm from '@lib/FormValidation/useForm';
 import { Label } from '@ui/Label';
-
-interface CreateDimGroup {
-  name: string;
-}
+import { useDrawingTools } from '@components/Maps/providers/DrawingToolsProvider';
+import { IDimGroup } from '@models';
+import { twMerge } from 'tailwind-merge';
+import { generateUuid } from '@utils';
 
 const RightBar = () => {
-  const { dimGroups } = useDimGroups();
+  const { 
+    dimGroups,
+    setDimGroups,
+    activeDimGroupUuid,
+    setActiveDimGroupUuid
+  } = useDimGroups();
+
+  const { sources, addSource, getSourceByDimGroupUuid } = useDrawingTools();
 
   const validationSchema = createValidationSchema({
     name: v.required().string().minLength(3),
   })
 
   const initialData = {
+    uuid: "",
     name: ""
   }
 
@@ -26,16 +34,26 @@ const RightBar = () => {
     handleChange,
     setFieldValue,
     handleSubmit
-  } = useForm<CreateDimGroup>({
+  } = useForm<IDimGroup>({
     initialState: initialData, 
     validationSchema: validationSchema,
     validatorFn: resolver,
-    onSubmit: handleSave
+    onSubmit: createNewDimGroup
   });
 
-  function handleSave(){
-    alert(JSON.stringify(formData, null, 2))
-    setFieldValue("name", "")
+  function createNewDimGroup(){
+    const newDimGroup: IDimGroup = {
+      uuid: `temp-${generateUuid()}`,
+      name: formData.name,
+    }
+    // TODO
+    // @ts-ignore
+    setDimGroups(prev => [...prev, newDimGroup])
+    addSource(newDimGroup.uuid, newDimGroup.name, );
+  }
+
+  function handleSelectDimGroup(uuid: IDimGroup["uuid"]) {
+    setActiveDimGroupUuid(uuid);
   }
 
   return (
@@ -60,12 +78,12 @@ const RightBar = () => {
 
       {dimGroups &&
         dimGroups.map((item, index) => (
-          <div className="flex">
+          <div 
+            key={`${item.name}-${index}`}
+            className={twMerge("flex", activeDimGroupUuid ? "bg-green-500" : "bg-gray-400")}
+            onClick={() => handleSelectDimGroup(item.uuid)}
+          >
             <h4>{item.name}</h4>
-            <span className="ml-auto flex items-baseline">
-              <p>{item.quantity}</p>
-              <small className="align-baseline">{item.unit}</small>
-            </span>
           </div>
         ))
       
@@ -74,4 +92,10 @@ const RightBar = () => {
   )
 }
 
-export default RightBar
+export default RightBar;
+
+
+{/* <span className="ml-auto flex items-baseline">
+<p>{item.quantity}</p>
+<small className="align-baseline">{item.unit}</small>
+</span> */}
