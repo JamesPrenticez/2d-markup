@@ -20,16 +20,37 @@ export const DimGroupProvider = ({ children }: ProviderProps) => {
   const [dimGroups, setDimGroups] = useState<IDimGroup[]>([]);
   const [activeDimGroupUuid, setActiveDimGroupUuid] = useState<IDimGroup["uuid"] | null>(null)
 
-  const addDimToDimGroup = (newDim: IDim) => {
-    if (!activeDimGroupUuid) return;
+  const addDimToDimGroup = (dimGroupUuid: IDimGroup["uuid"], newDim: IDim) => {
     setDimGroups((prevDimGroups) =>
-      prevDimGroups.map((dimGroup) =>
-        dimGroup.uuid === activeDimGroupUuid
-          ? {...dimGroup, dims: [...(dimGroup.dims || []), newDim] }
-          : dimGroup
-      )
+      prevDimGroups.map((dimGroup) => {
+        if (dimGroup.uuid === dimGroupUuid) {
+          const newDims = [...(dimGroup.dims || [])];
+          const newDimCount = newDims.length + 1;
+          const newDimWithIncrementedName = {
+            ...newDim,
+            name: `${newDim.name}-${newDimCount}`,
+          };
+          newDims.push(newDimWithIncrementedName);
+          return {
+            ...dimGroup,
+            dims: newDims,
+          };
+        }
+        return dimGroup;
+      })
     );
   };
+
+  // const addDimToDimGroup = (newDim: IDim) => {
+  //   if (!activeDimGroupUuid) return;
+  //   setDimGroups((prevDimGroups) =>
+  //     prevDimGroups.map((dimGroup) =>
+  //       dimGroup.uuid === activeDimGroupUuid
+  //         ? {...dimGroup, dims: [...(dimGroup.dims || []), newDim] }
+  //         : dimGroup
+  //     )
+  //   );
+  // };
 
   const value = {
     dimGroups,

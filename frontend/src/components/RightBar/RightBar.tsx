@@ -1,14 +1,18 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useDimGroups } from '@components/Maps/providers/DimGroupProvider'
 import { createValidationSchema, v, resolver } from '@lib/FormValidation/validator';
 import { Button, ErrorMessage, InputText } from '@ui';
 import useForm from '@lib/FormValidation/useForm';
 import { Label } from '@ui/Label';
 import { useDrawingTools } from '@components/Maps/providers/DrawingToolsProvider';
-import { IDimGroup } from '@models';
+import { IDim, IDimGroup } from '@models';
 import { twMerge } from 'tailwind-merge';
-import { generateUuid } from '@utils';
-import { loadGeoJSONFromLocalStorage } from '@components/Maps/persistance';
+import { formatNumber, generateUuid } from '@utils';
+import { localStorageKey } from '@constants';
+
+import { loadFromLocalStorage,  } from '@components/Maps/persistance';
+import { saveToLocalStorage } from '@components/Maps/persistance/saveToLocalStorage';
+import GeoJSON from 'ol/format/GeoJSON';
 
 const RightBar = () => {
   const { 
@@ -57,24 +61,41 @@ const RightBar = () => {
     setActiveDimGroupUuid(uuid);
   }
 
-  function getDimsInDimGroup(){
-    if(!activeDimGroupUuid) return;
-    const dims = getSourceByDimGroupUuid(activeDimGroupUuid)
-    console.log(dims)
-  }
-
   function handleSave(){
-    if(!activeDimGroupUuid) return;
-    const source = getSourceByDimGroupUuid(activeDimGroupUuid)
-    console.log(source)
-    // loadGeoJSONFromLocalStorage(source)
+    saveToLocalStorage(localStorageKey, dimGroups)
+    console.log("saved")
   }
 
   function handleLoad(){
-    if(!activeDimGroupUuid) return;
-    const source = getSourceByDimGroupUuid(activeDimGroupUuid)
-    loadGeoJSONFromLocalStorage(source)
+    const data = loadFromLocalStorage(localStorageKey, setDimGroups)
+    for (const dimGroup of data) {
+      addSource(dimGroup.uuid, dimGroup.name);
+    }
   }
+
+  const processDims = () => {
+    dimGroups.forEach((dimGroup: IDimGroup) => {
+      if (dimGroup.dims) {
+        dimGroup.dims.forEach((dim: IDim) => {
+          if (dim.geoData) {
+            const geojson = new GeoJSON();
+            const features = geojson.readFeatures(dim.geoData, {
+              featureProjection: 'EPSG:3857', // Adjust projection if needed
+              dataProjection: 'EPSG:4326' // Assuming the GeoJSON data is in EPSG:4326 (common for GeoJSON)
+            });
+
+            const source = getSourceByDimGroupUuid(dimGroup.uuid);
+            source.addFeatures(features);
+          }
+        });
+      }
+    });
+  };
+
+  useEffect(() => {
+    if(sources.length)
+    processDims()
+  }, [sources])
 
   return (
     <div className="bg-blue-500">
@@ -100,18 +121,18 @@ const RightBar = () => {
         dimGroups.map((group, index) => (
           <div 
             key={`${group.name}-${index}`}
-            className={twMerge("flex", activeDimGroupUuid ? "bg-green-500" : "bg-gray-400")}
+            className={activeDimGroupUuid ? "bg-green-500" : "bg-gray-400"}
             onClick={() => handleSelectDimGroup(group.uuid)}
           >
-            <h4>{group.name}</h4>
+              <h4>{group.name}</h4>
               {group.dims?.map((dim, index) => (
                 <div
                   key={`${dim.name}-${index}`}
-                  className="flex bg-purple-500 "
+                  className="bg-purple-500 flex "
                 >
                   <h5>{dim.name}</h5>
                   <span className="ml-auto flex items-baseline">
-                    <p>{dim.quantity}</p>
+                    <p>{formatNumber(dim.area ?? 0)}</p>
                     <small className="align-baseline">{dim.unit}</small>
                   </span>
                 </div>
@@ -121,18 +142,18 @@ const RightBar = () => {
       
       }
 
-      <Button onClick={handleSave}>
-        Get source
-      </Button>
-      {/* <Button onClick={handleSave}>
-        Save to stroage
-      </Button> */}
-      <Button onClick={handleLoad}>
-        Load from storage
-      </Button>
-      <Button onClick={() => console.log(dimGroups)}>
-        dimmys
-      </Button>
+      <div>
+        <Button onClick={() => console.log(sources)}>
+          Source
+        </Button>
+        <Button onClick={handleSave}>
+          Save
+        </Button>
+        <Button onClick={handleLoad}>
+          Load
+        </Button>
+      </div>
+
 
     </div>
   )
