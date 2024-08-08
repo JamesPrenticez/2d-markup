@@ -4,7 +4,7 @@ import LayerSwitcher from './LayerSwitcher'
 import MapRender from './MapRender'
 import Scale from './Scale'
 import ScaleControl from './ScaleControl'
-import DrawPolygon from './draw/xxxDrawPolygon'
+// import DrawPolygon from './draw/xxxDrawPolygon'
 
 const Map = () => {
   return (
