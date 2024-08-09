@@ -1,5 +1,6 @@
 import React, { Suspense } from 'react';
 import { 
+  Draw,
   LeftBar,
   Loading,
   Map,
@@ -7,12 +8,10 @@ import {
   RightBar,
   TopBar
 } from "@components"
-import { project } from "@constants"
 import { MapProvider } from '@components/Maps/providers/MapProvider';
 import { DrawingToolsProvider } from '@components/Maps/providers/DrawingToolsProvider';
 import { DimGroupProvider } from '@components/Maps/providers/DimGroupProvider';
 import { BottomBar } from '@components/BottomBar';
-import Test from './Test';
 import { Route, Routes } from 'react-router-dom';
 
 function App() {
@@ -26,6 +25,7 @@ function App() {
         <Navbar />
 
         <Routes>
+          <Route path={"/draw"} element={<Draw />} />
           <Route path={"/"} element={
             <MapProvider>
               <DrawingToolsProvider>

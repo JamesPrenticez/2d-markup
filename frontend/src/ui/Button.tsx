@@ -11,7 +11,7 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(({ 
   className,
   variant = "filled",
-  color = 'secondary',
+  color = 'primary',
   asChild = false,
   children,
   ...props
@@ -19,8 +19,8 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
 
   const options:any = {
     primary: {
-      outlined: "border-2 border-primary",
-      filled: "bg-primary hover:bg-primary/80"
+      outlined: "border-2 border-primary text-black",
+      filled: "bg-primary hover:bg-primary/80 text-secondary"
     },
     secondary: {
       outlined: "border-2 border-secondary",

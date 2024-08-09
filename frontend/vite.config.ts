@@ -18,6 +18,8 @@ export default defineConfig({
         { find: '@utils', replacement: '/src/utils' },
         { find: '@models', replacement: '/src/models' },
         { find: '@icons', replacement: '/src/icons' },
+        { find: '@redux', replacement: '/src/redux' },
+        { find: '@mocks', replacement: '/src/mocks' },
       ],
     }),
   ],
